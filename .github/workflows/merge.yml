@@ -37,8 +37,11 @@ jobs:
             requirements_for_test.in
             requirements_for_test.txt
 
-      - name: Install application requirements (pip)
-        run: uv pip install -r requirements_for_test.txt
+      - name: Install application requirements
+        run: |
+          uv pip install -r requirements_for_test.txt
+          npm install
+          npm run build
 
       - name: Set tag
         id: set-tag

@@ -37,7 +37,7 @@ jobs:
       - name: Install application requirements
         run: |
           uv pip install -r requirements_for_test.txt
-          npm run install
+          npm install
           npm run build
 
       - uses: astral-sh/ruff-action@v3
