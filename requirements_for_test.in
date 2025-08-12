@@ -1,2 +1,8 @@
 -r requirements.txt
 -r requirements_for_test_common.in
+
+pytest-cov
+pytest-dotenv
+pytest-md
+pytest-emoji
+python-dotenv

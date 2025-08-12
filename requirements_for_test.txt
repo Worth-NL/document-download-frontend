@@ -41,7 +41,9 @@ click==8.1.7
     #   black
     #   flask
 coverage==7.6.4
-    # via pytest-testmon
+    # via
+    #   pytest-cov
+    #   pytest-testmon
 dnspython==2.6.1
     # via
     #   -r requirements.txt
@@ -145,7 +147,9 @@ phonenumbers==8.13.52
 platformdirs==4.3.6
     # via black
 pluggy==1.5.0
-    # via pytest
+    # via
+    #   pytest
+    #   pytest-cov
 prometheus-client==0.15.0
     # via
     #   -r requirements.txt
@@ -161,12 +165,24 @@ pypdf==3.17.0
 pytest==8.3.4
     # via
     #   -r requirements_for_test_common.in
+    #   pytest-cov
+    #   pytest-dotenv
+    #   pytest-emoji
     #   pytest-env
+    #   pytest-md
     #   pytest-mock
     #   pytest-testmon
     #   pytest-xdist
+pytest-cov==6.2.1
+    # via -r requirements_for_test.in
+pytest-dotenv==0.5.2
+    # via -r requirements_for_test.in
+pytest-emoji==0.2.0
+    # via -r requirements_for_test.in
 pytest-env==1.1.5
     # via -r requirements_for_test_common.in
+pytest-md==0.2.0
+    # via -r requirements_for_test.in
 pytest-mock==3.14.0
     # via -r requirements_for_test_common.in
 pytest-testmon==2.1.1
@@ -178,6 +194,10 @@ python-dateutil==2.8.2
     #   -r requirements.txt
     #   botocore
     #   freezegun
+python-dotenv==1.1.1
+    # via
+    #   -r requirements_for_test.in
+    #   pytest-dotenv
 python-json-logger==2.0.7
     # via
     #   -r requirements.txt
