@@ -24,7 +24,7 @@ run-flask-with-docker: ## Run flask with docker
 .PHONY: test
 test:
 	ruff check .
-	black --check .
+	ruff format --check .
 	py.test tests/
 
 .PHONY: test-with-docker
@@ -60,3 +60,9 @@ freeze-requirements: ## create static requirements.txt
 .PHONY: generate-version-file
 generate-version-file: ## Generates the app version file
 	@echo -e "__git_commit__ = \"${GIT_COMMIT}\"\n__time__ = \"${DATE}\"" > ${APP_VERSION_FILE}
+
+### NotifyNL ###########################################################################################################
+.PHONY: bootstrap-nl
+bootstrap-nl: generate-version-file
+	uv pip install -r requirements_nl_test.txt
+	npm ci --no-audit && npm rebuild node-sass && npm run build

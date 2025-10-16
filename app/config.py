@@ -50,7 +50,49 @@ class Test(Development):
     DOCUMENT_DOWNLOAD_API_HOST_NAME_INTERNAL = "https://download.test-doc-download-api-internal.gov.uk"
 
 
+################
+### NotifyNL ###
+################
+NL_PREFIX = "notifynl"
+
+
+class ConfigNL(Config):
+    pass
+
+
+class DevNL(ConfigNL):
+    DEBUG = True
+    NOTIFY_REQUEST_LOG_LEVEL = "DEBUG"
+
+    NOTIFY_ENVIRONMENT = "development"
+
+
+class TestNL(ConfigNL):
+    DEBUG = True
+    NOTIFY_REQUEST_LOG_LEVEL = "DEBUG"
+
+    NOTIFY_ENVIRONMENT = "test"
+
+
+class AccNL(ConfigNL):
+    DEBUG = False
+    NOTIFY_REQUEST_LOG_LEVEL = "INFO"
+
+    NOTIFY_ENVIRONMENT = "acceptance"
+
+
+class ProdNL(ConfigNL):
+    DEBUG = False
+    NOTIFY_REQUEST_LOG_LEVEL = "ERROR"
+
+    NOTIFY_ENVIRONMENT = "production"
+
+
 configs = {
     "development": Development,
+    "devnl": DevNL,
     "test": Test,
+    "testnl": TestNL,
+    "acceptance": AccNL,
+    "production": ProdNL
 }

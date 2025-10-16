@@ -37,11 +37,11 @@ RUN echo "Install OS dependencies for python app requirements" &&  \
     git \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
-COPY requirements.txt .
+COPY requirements_nl.txt .
 
 RUN echo "Installing python dependencies" && \
     python3 -m venv /opt/venv && \
-    uv pip sync --python /opt/venv/bin/python requirements.txt
+    uv pip sync --python /opt/venv/bin/python requirements_nl.txt
 
 COPY . .
 
@@ -75,7 +75,7 @@ USER notify
 ENTRYPOINT [ "/home/vcap/app/entrypoint.sh" ]
 
 ##### Test Image ##############################################################
-FROM production as test
+FROM production AS test
 
 USER root
 
@@ -99,8 +99,8 @@ COPY --from=python_build --chown=notify:notify /opt/venv /opt/venv
 RUN mkdir -p app
 
 # Install dev/test requirements
-COPY --chown=notify:notify Makefile requirements_for_test.txt package-lock.json package.json rollup.config.mjs ./
-RUN make bootstrap
+COPY --chown=notify:notify Makefile requirements_nl_test.txt package-lock.json package.json rollup.config.mjs ./
+RUN make bootstrap-nl
 
 # Copy from the real world, one dir up (project root) into the environment's current working directory
 # Docker will rebuild from here down every time.
