@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "DD-Frontend",
+      "type": "debugpy",
+      "request": "launch",
+      "envFile": "${workspaceFolder}/.env",
+      "module": "flask",
+      "args": [
+        "run",
+        "--port",
+        "7001",
+        "--debug"
+      ],
+      "autoStartBrowser": false,
+      "consoleName": "DD-Frontend",
+      "preLaunchTask": "Install DD-Frontend local LandRegistry-frontend-jinja"
+    },
+    {
+      "name": "DD-Frontend watch",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "watch"],
+      "preLaunchTask": "NPM DD-Frontend build"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Notify DD-Frontend",
+      "configurations": [
+        "DD-Frontend",
+        "DD-Frontend watch"
+      ],
+      "stopAll": true
+    }
+  ]
+}
