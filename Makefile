@@ -6,6 +6,8 @@ APP_VERSION_FILE = app/version.py
 GIT_BRANCH ?= $(shell git symbolic-ref --short HEAD 2> /dev/null || echo "detached")
 GIT_COMMIT ?= $(shell git rev-parse HEAD)
 
+EXCLUDE_REQUIREMENTS_NEWER_THAN_DAYS ?= 7
+
 
 ## DEVELOPMENT
 
@@ -21,11 +23,14 @@ run-flask:
 run-flask-with-docker: ## Run flask with docker
 	FLASK_APP=application.py FLASK_DEBUG=1 ./scripts/run_locally_with_docker.sh web-local
 
-.PHONY: test
-test:
+.PHONY: lint
+lint: ## Run static analysis
 	ruff check .
 	ruff format --check .
-	py.test tests/
+
+.PHONY: test
+test: lint ## Run tests
+	pytest -n auto --maxfail=10 tests/
 
 .PHONY: test-with-docker
 test-with-docker: ## Run tests in Docker container
@@ -51,11 +56,19 @@ bootstrap-with-docker: generate-version-file
 
 .PHONY: freeze-requirements
 freeze-requirements: ## create static requirements.txt
-	uv pip compile requirements.in -o requirements.txt
+	uv pip compile requirements.in -o requirements.txt $(EXTRA_UV_PIP_COMPILE_FLAGS)
 	uv pip sync requirements.txt
 	python -c "from notifications_utils.version_tools import copy_config; copy_config()"
-	uv pip compile requirements_for_test.in -o requirements_for_test.txt
+	uv pip compile requirements_for_test.in -o requirements_for_test.txt $(EXTRA_UV_PIP_COMPILE_FLAGS)
 	uv pip sync requirements_for_test.txt
+
+.PHONY: refreeze-requirements
+refreeze-requirements: ## Upgrade unpinned requirements
+	EXTRA_UV_PIP_COMPILE_FLAGS="--upgrade --exclude-newer $(EXCLUDE_REQUIREMENTS_NEWER_THAN_DAYS)d" make freeze-requirements
+
+.PHONY: show-outdated-requirements
+show-outdated-requirements: ## Audit requirements.in
+	python -c "from notifications_utils.version_tools import show_outdated_requirements; show_outdated_requirements()"
 
 .PHONY: generate-version-file
 generate-version-file: ## Generates the app version file

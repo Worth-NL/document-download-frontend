@@ -7,6 +7,8 @@ from flask import abort, current_app, redirect, render_template, request, url_fo
 from flask.ctx import has_request_context
 from markupsafe import Markup
 from notifications_python_client.errors import HTTPError
+from notifications_utils.file_types import format_file_type
+from notifications_utils.formatters import format_file_size
 from werkzeug.exceptions import Gone, NotFound, TooManyRequests
 
 from app import service_api_client
@@ -14,23 +16,8 @@ from app.forms import EmailAddressForm
 from app.main import main
 from app.utils import (
     assess_contact_type,
-    bytes_to_pretty_file_size,
     document_has_expired,
 )
-
-FILE_EXTENSION_TO_PRETTY_FILE_TYPE = {
-    "csv": "CSV file",
-    "doc": "Microsoft Word document",
-    "docx": "Microsoft Word document",
-    "odt": "text file",
-    "pdf": "PDF",
-    "png": "PNG file",
-    "rtf": "text file",
-    "txt": "text file",
-    "jpeg": "JPEG file",
-    "json": "JSON file",
-    "xlsx": "Microsoft Excel spreadsheet",
-}
 
 
 @main.route("/_status")
@@ -79,7 +66,7 @@ def landing(service_id, document_id):
     except (Gone, NotFound) as e:
         # pretty-up these particular errors with more context
         return render_template(
-            "views/file_unavailable.html",
+            "views/file-unavailable.html",
             status_code=e.code,
             service_name=service_name,
             service_contact_info=service_contact_info,
@@ -87,9 +74,11 @@ def landing(service_id, document_id):
         ), e.code
 
     if "confirm_email" not in metadata:
+        extra = {"service_id": service_id, "document_id": document_id, "metadata": metadata}
         current_app.logger.info(
-            "Metadata for %(service_id)s/%(document_id)s does not contain `confirm_email` key: %(metadata)s",
-            {"service_id": service_id, "document_id": document_id, "metadata": metadata},
+            "Metadata for %(service_id)s/%(document_id)s does not contain `confirm_email` key: %(metadata)r",
+            extra,
+            extra=extra,
         )
 
     if metadata.get("confirm_email", False) is True:
@@ -99,7 +88,7 @@ def landing(service_id, document_id):
         continue_url = url_for("main.download_document", service_id=service_id, document_id=document_id, key=key)
 
     return render_template(
-        "views/index.html",
+        "views/landing.html",
         service_id=service_id,
         service_name=service_name,
         service_contact_info=service_contact_info,
@@ -127,7 +116,7 @@ def confirm_email_address(service_id, document_id):
     except (Gone, NotFound) as e:
         # pretty-up these particular errors with more context
         return render_template(
-            "views/file_unavailable.html",
+            "views/file-unavailable.html",
             status_code=e.code,
             service_name=service_name,
             service_contact_info=service_contact_info,
@@ -180,7 +169,7 @@ def confirm_email_address(service_id, document_id):
 
     return (
         render_template(
-            "views/confirm_email_address.html",
+            "views/confirm-email-address.html",
             form=form,
             service_name=service_name,
             service_id=service_id,
@@ -210,7 +199,7 @@ def download_document(service_id, document_id):
     except (Gone, NotFound) as e:
         # pretty-up these particular errors with more context
         return render_template(
-            "views/file_unavailable.html",
+            "views/file-unavailable.html",
             status_code=e.code,
             service_name=service_name,
             service_contact_info=service_contact_info,
@@ -220,8 +209,8 @@ def download_document(service_id, document_id):
     return render_template(
         "views/download.html",
         download_link=metadata["direct_file_url"],
-        file_size=bytes_to_pretty_file_size(metadata["size_in_bytes"]),
-        file_type=FILE_EXTENSION_TO_PRETTY_FILE_TYPE[metadata["file_extension"]],
+        file_size=format_file_size(metadata["size_in_bytes"]),
+        file_type=format_file_type(metadata["file_extension"]),
         service_name=service_name,
         service_contact_info=service_contact_info,
         contact_info_type=contact_info_type,
