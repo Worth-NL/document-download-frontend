@@ -372,9 +372,7 @@ govuk-bank-holidays==0.17 \
     --hash=sha256:5d6455bb658f7c92dba05cecbc139450d3318299f6940a9612d71f79d66c8ae8 \
     --hash=sha256:e88986aa010293a64f9bf86de01a1d9282d080ab4754f8ac976370c5fc3b188d
     # via notifications-utils
-govuk-frontend-jinja==4.0.0 \
-    --hash=sha256:1bcb50779ae4852a0fcb9fb53dab2301a08f1435923900cf5d1be84d8063f31b \
-    --hash=sha256:8e21fe3c0f3a2499507b021f32f99a3c0107d19cda8c03d9e8572333568e17e9
+govuk-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@1d5fec9ecf5c51f3cd9a4c4fb0e38620efb32488
     # via -r requirements_nl.in
 greenlet==3.2.4 \
     --hash=sha256:00fadb3fedccc447f517ee0d3fd8fe49eae949e1cd0f6a611818f4f6fb7dc83b \
