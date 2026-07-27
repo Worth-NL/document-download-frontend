@@ -94,5 +94,5 @@ configs = {
     "test": Test,
     "testnl": TestNL,
     "acceptance": AccNL,
-    "production": ProdNL
+    "production": ProdNL,
 }
