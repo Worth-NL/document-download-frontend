@@ -26,7 +26,7 @@
         {
             "label": "Install DD-Frontend local notifynl-utils",
             "type": "shell",
-            "command": "uv pip uninstall notifynl-utils && uv pip install -e ../notifynl-utils",
+            "command": "CHOICE=$(cat /workspace/.local-editables-choice 2>/dev/null || echo No); if [ \"$CHOICE\" = \"Yes\" ]; then uv pip uninstall notifications-utils && uv pip install -e ../notifynl-utils; fi",
             "dependsOn": ["Install DD-Frontend Python requirements"],
             "presentation": {
                 "showReuseMessage": false,
@@ -42,7 +42,7 @@
         {
             "label": "Install DD-Frontend local LandRegistry-frontend-jinja",
             "type": "shell",
-            "command": "uv pip uninstall govuk-frontend-jinja && uv pip install -e ../LandRegistry-frontend-jinja",
+            "command": "CHOICE=$(cat /workspace/.local-editables-choice 2>/dev/null || echo No); if [ \"$CHOICE\" = \"Yes\" ]; then uv pip uninstall govuk-frontend-jinja && uv pip install -e ../LandRegistry-frontend-jinja; fi",
             "dependsOn": ["Install DD-Frontend local notifynl-utils"],
             "presentation": {
                 "showReuseMessage": false,
