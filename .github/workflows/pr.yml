@@ -198,6 +198,10 @@ jobs:
       contents: read
       pull-requests: write
 
+    env:
+      HELM_SET_ARGS: >-
+        --set apps.documentDownloadFrontend.image.tag=${{ needs.build.outputs.tag }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -206,13 +210,48 @@ jobs:
           token: ${{ secrets.RELEASE_TOKEN }}
         name: Checkout Worth-NL/notifynl-charts-private
 
-      - uses: bwvolleyball/k8s-toolkit@v1.0.0
+      # K8S_CONFIG is stored base64-encoded (shared with the other submodules'
+      # workflows, which still use bwvolleyball/k8s-toolkit and decode it
+      # internally). azure/k8s-set-context's `kubeconfig` method expects raw
+      # kubeconfig YAML, not base64, so decode it here first.
+      - name: Decode kubeconfig
+        id: decode-kubeconfig
+        run: |
+          {
+            echo "content<<KUBECONFIG_EOF"
+            echo "${{ secrets.K8S_CONFIG }}" | base64 -d
+            echo "KUBECONFIG_EOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - uses: azure/k8s-set-context@v4
         with:
-          config: ${{ secrets.K8S_CONFIG }}
+          method: kubeconfig
+          kubeconfig: ${{ steps.decode-kubeconfig.outputs.content }}
+
+      # --reset-then-reuse-values and --rollback-on-failure below are Helm 4
+      # flag names; the runner's default Helm 3 would reject both.
+      - uses: azure/setup-helm@v4
+        with:
+          version: v4.2.2
 
       - name: Helm chart dependency build
         run: helm dependency build
         working-directory: ${{ github.workspace }}/notifynl-full
+
+      # Renders the chart and validates against the live cluster API/CRDs
+      # (required/fail template checks included) without persisting anything
+      # or scheduling any pods. Uses the exact same flags as the real deploy
+      # below so it can't drift out of sync and give a false pass.
+      - name: Pre-flight validation (dry-run, no cluster mutation)
+        id: helm-dry-run
+        run: |
+          set -x
+          helm upgrade --install notifynl notifynl-full/ \
+          -n ${{ vars.NAMESPACE }} \
+          --reset-then-reuse-values \
+          $HELM_SET_ARGS \
+          --rollback-on-failure \
+          --dry-run=server
 
       - name: Deploy new tag
         id: helm-deploy
@@ -220,34 +259,47 @@ jobs:
           set -x
           helm upgrade --install notifynl notifynl-full/ \
           -n ${{ vars.NAMESPACE }} \
-          --reuse-values \
-          --set apps.documentDownloadFrontend.image.tag=${{ needs.build.outputs.tag }} \
-          --wait \
+          --reset-then-reuse-values \
+          $HELM_SET_ARGS \
+          --rollback-on-failure \
           --timeout 300s
 
       - name: Comment on PR if deployment fails
-        if: failure() && steps.helm-deploy.outcome == 'failure' && github.event_name == 'pull_request'
+        if: failure() && (steps.helm-dry-run.outcome == 'failure' || steps.helm-deploy.outcome == 'failure') && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           script: |
+            const dryRunFailed = "${{ steps.helm-dry-run.outcome }}" === "failure";
+            const body = dryRunFailed
+              ? [
+                  "⚠️ **Test environment deployment blocked (pre-flight check failed)**",
+                  "",
+                  "- Environment: `Test`",
+                  "- Image tag: `${{ needs.build.outputs.tag }}`",
+                  "",
+                  "The pre-flight `helm upgrade --dry-run=server` check failed, so the real deploy never ran — **the cluster was not touched**, nothing to clean up.",
+                  "",
+                  "This validates the whole `notifynl-full` release, not just this service, so the fault may be elsewhere in the chart. Most likely causes:",
+                  "- A required value is unset — e.g. `apps.documentDownloadFrontend.host`, which the ingress template declares `required`. `--reset-then-reuse-values` only carries forward values previously supplied via `--set`/`-f`, so anything never seeded stays missing.",
+                  "- `notifynl-full` added a value with no chart default. Seed it once with a manual `helm upgrade --set <key>=<value>` and later deploys carry it forward automatically."
+                ].join("\n")
+              : [
+                  "❌ **Test environment deployment failed**",
+                  "",
+                  "- Environment: `Test`",
+                  "- Image tag: `${{ needs.build.outputs.tag }}`",
+                  "",
+                  "The pre-flight check passed, so the chart renders — this failed while rolling out. `--rollback-on-failure` means Helm has **already attempted to roll the release back**; confirm that rollback actually succeeded rather than assuming a clean state.",
+                  "",
+                  "Most likely causes:",
+                  "- The image is not pullable — ghcr.io package visibility, or expired/changed registry credentials.",
+                  "- The new image starts but the container crash-loops, so the 300s timeout trips. This service has no readiness probe configured, so check the pod directly.",
+                  "",
+                  "Inspect with `kubectl -n <namespace> describe deploy document-download-frontend` and the pod logs."
+                ].join("\n");
             github.rest.issues.createComment({
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: context.issue.number,
-              body: [
-                "❌ **Test environment deployment failed**",
-                "",
-                "- Environment: `Test`",
-                "- Image tag: `${{ needs.build.outputs.tag }}`",
-                "",
-                "Check the workflow logs for the Helm error output.",
-                "",
-                "Check the test env k8s state/logs.",
-                "",
-                "Check if the helm release needs a rollback.",
-                "",
-                "Most likely issues:",
-                "- Package visibility",
-                "- ghcr.io credentials expiration or change"
-              ].join("\n")
+              body
             })
