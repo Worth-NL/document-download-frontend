@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
+    "@rijkshuisstijl-community/design-tokens": "^2.0.0",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-terser": "1.0.0",
     "better-npm-audit": "3.11.0",

@@ -33,6 +33,8 @@ export default [
       copy({
         targets: [
           { src: paths.src + 'images/**/*', dest: paths.dist + 'images/' },
+          // NotifyNL brand fonts, referenced by notify-nl/_theme.scss as ../fonts/
+          { src: paths.src + 'fonts/**/*', dest: paths.dist + 'fonts/' },
           { src: govukFrontendAssetPaths.images, dest: paths.dist + 'images/' },
           { src: govukFrontendAssetPaths.fonts, dest: paths.dist + 'fonts/' },
           { src: govukFrontendAssetPaths.manifest, dest: paths.dist }

@@ -23,3 +23,6 @@ $govuk-assets-path: "/static/";
 
 @import "utilities";
 @import "overrides/spacing";
+
+// NotifyNL branding on top of GOV.UK Frontend -- keep last so it wins
+@import "notify-nl/theme";

@@ -1,7 +1,11 @@
-{% extends "govuk_frontend_jinja/template.html" %}
-{% from "components/footer/macro.html" import govukFooterWithoutExternalLinks -%}
+{% extends "govuk_frontend_jinja/template-nl.html" %}
 
 {% set cspNonce = request.csp_nonce %}
+
+{# Drives the shared NL header and footer in template-nl.html. No homepageUrl is
+   passed, so the header renders as unlinked branding -- this app is reached from
+   a link in an email and has no homepage of its own. #}
+{% set productName = "NotifyNL" %}
 
 {% block headIcons %}
   <link rel="icon" sizes="48x48" href="{{ asset_url('images/favicon.ico') }}">
@@ -23,14 +27,16 @@
 {% endset %}
 
 {% block pageTitle %}
-  {{ _per_page_title }} – GOV.UK
+  {{ _per_page_title }} – NotifyNL
 {% endblock %}
 
-{% block govukHeader %}
-  {{ govukHeader({
-    "assetsPath": "/static/images/",
-    "homepageUrl": "https://www.gov.uk"
-  }) }}
+{% block govukFooter %}
+  {#- Same shared NL footer as admin, with both licence lines. The UK Open
+  Government Licence and Crown copyright references render as plain text rather
+  than links: the URLs of these pages contain the document's decryption key, so
+  they must not link out to nationalarchives.gov.uk (see
+  test_footer_doesnt_link_to_national_archives). #}
+  {{ govukFooter({"unlinkUkLicensing": True}) }}
 {% endblock %}
 
 {% block content %}
@@ -40,14 +46,6 @@
       {% block main_content %}{% endblock %}
     </div>
   </div>
-{% endblock %}
-
-{% block govukFooter %}
-  {{ govukFooterWithoutExternalLinks({
-    "contentLicence": {
-      "text": " All content is available under the Open Government Licence v3.0, except where otherwise stated"
-    }
-  }) }}
 {% endblock %}
 
 {% block bodyEnd %}
