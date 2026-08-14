@@ -186,7 +186,7 @@ def register_errorhandlers(application):
 
 def init_jinja(application):
     repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-    template_folders = [os.path.join(repo_root, "app/templates")]
+    template_folders = [os.path.join(repo_root, "app/templates_nl")]
     jinja_loader = jinja2.ChoiceLoader(
         [
             jinja2.FileSystemLoader(template_folders),

@@ -1,19 +1,19 @@
-from datetime import date, timedelta
 from urllib import parse
 
 import requests
-from dateutil import parser
 from flask import abort, current_app, redirect, render_template, request, url_for
 from flask.ctx import has_request_context
 from markupsafe import Markup
 from notifications_python_client.errors import HTTPError
-from notifications_utils.file_types import format_file_type
+from notifications_utils.file_types import format_file_type_nl
 from notifications_utils.formatters import format_file_size
 from werkzeug.exceptions import Gone, NotFound, TooManyRequests
 
 from app import service_api_client
 from app.forms import EmailAddressForm
 from app.main import main
+from app.overrides_nl.copy import CONFIRM_EMAIL_PAGE_NAME, email_mismatch_error
+from app.overrides_nl.formatters import format_file_expiry_date
 from app.utils import (
     assess_contact_type,
     document_has_expired,
@@ -136,7 +136,7 @@ def confirm_email_address(service_id, document_id):
 
         except TooManyRequests:
             return (
-                render_template("error/429.html", go_back_link=request.url, page_name="confirm your email address"),
+                render_template("error/429.html", go_back_link=request.url, page_name=CONFIRM_EMAIL_PAGE_NAME),
                 429,
             )
 
@@ -160,12 +160,7 @@ def confirm_email_address(service_id, document_id):
             response.set_cookie(**set_cookie_values)
             return response
 
-        form.form_errors.append(
-            Markup(
-                "This is not the email address the file was sent to.<br><br>"
-                f"To confirm the file was meant for you, enter the email address {service_name} sent the file to."
-            )
-        )
+        form.form_errors.append(Markup(email_mismatch_error(service_name)))
 
     return (
         render_template(
@@ -210,25 +205,12 @@ def download_document(service_id, document_id):
         "views/download.html",
         download_link=metadata["direct_file_url"],
         file_size=format_file_size(metadata["size_in_bytes"]),
-        file_type=format_file_type(metadata["file_extension"]),
+        file_type=format_file_type_nl(metadata["file_extension"]),
         service_name=service_name,
         service_contact_info=service_contact_info,
         contact_info_type=contact_info_type,
-        file_expiry_date=_format_file_expiry_date(metadata["available_until"]) if metadata["available_until"] else None,
+        file_expiry_date=format_file_expiry_date(metadata["available_until"]) if metadata["available_until"] else None,
     )
-
-
-def _format_file_expiry_date(available_until: str) -> str:
-    file_expiry_date = parser.parse(available_until).date()
-
-    formatted_date = file_expiry_date.strftime("%d %B %Y").lstrip("0")
-    day_of_week = file_expiry_date.strftime("%A")
-
-    # only show day of the week if file expiry date within a month from today
-    if file_expiry_date - date.today() <= timedelta(days=30):
-        return f"{day_of_week} {formatted_date}"
-
-    return formatted_date
 
 
 def _get_service_or_raise_error(service_id):

@@ -1,4 +1,3 @@
-import pytest
 from bs4 import BeautifulSoup
 from flask import url_for
 from flask_wtf.csrf import CSRFError
@@ -6,16 +5,14 @@ from flask_wtf.csrf import CSRFError
 from tests import normalize_spaces
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
-def test_bad_url_returns_page_not_found(client):
+def test_bad_url_returns_page_not_found_nl(client):
     response = client.get("/bad_url")
     assert response.status_code == 404
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert page.h1.string.strip() == "Page not found"
+    assert page.h1.string.strip() == "Pagina niet gevonden"
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
-def test_csrf_error_returns_400_status_code_and_500_error_page(
+def test_csrf_error_returns_400_status_code_and_500_error_page_nl(
     service_id,
     document_id,
     key,
@@ -41,4 +38,4 @@ def test_csrf_error_returns_400_status_code_and_500_error_page(
     assert response.status_code == 400
 
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.h1.text) == "Sorry, there’s a problem with the service"
+    assert normalize_spaces(page.h1.text) == "Sorry, er is een probleem met de dienst"

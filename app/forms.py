@@ -7,9 +7,15 @@ from notifications_utils.recipient_validation.errors import InvalidEmailError
 from wtforms import StringField, ValidationError
 from wtforms.validators import DataRequired
 
+from app.overrides_nl.copy import (
+    EMAIL_ADDRESS_INVALID_MESSAGE,
+    EMAIL_ADDRESS_LABEL,
+    EMAIL_ADDRESS_REQUIRED_MESSAGE,
+)
+
 
 class ValidEmail:
-    message = "Not a valid email address"
+    message = EMAIL_ADDRESS_INVALID_MESSAGE
 
     def __call__(self, form, field):
         if not field.data:
@@ -34,7 +40,7 @@ class EmailAddressField(StringField):
             "type": "email",
             "errorMessage": error_message,
             "label": {
-                "text": "Email address",
+                "text": EMAIL_ADDRESS_LABEL,
                 "for": self.id,
             },
             "spellcheck": False,
@@ -46,7 +52,7 @@ class EmailAddressField(StringField):
 
 class EmailAddressForm(Form):
     email_address = EmailAddressField(
-        "Email address",
-        validators=[DataRequired("Enter your email address"), ValidEmail()],
+        EMAIL_ADDRESS_LABEL,
+        validators=[DataRequired(EMAIL_ADDRESS_REQUIRED_MESSAGE), ValidEmail()],
         filters=[strip_all_whitespace],
     )
