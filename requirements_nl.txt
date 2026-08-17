@@ -376,8 +376,6 @@ govuk-bank-holidays==0.17 \
     --hash=sha256:5d6455bb658f7c92dba05cecbc139450d3318299f6940a9612d71f79d66c8ae8 \
     --hash=sha256:e88986aa010293a64f9bf86de01a1d9282d080ab4754f8ac976370c5fc3b188d
     # via notifications-utils
-govuk-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@1d5fec9ecf5c51f3cd9a4c4fb0e38620efb32488
-    # via -r requirements_nl.in
 greenlet==3.2.4 \
     --hash=sha256:00fadb3fedccc447f517ee0d3fd8fe49eae949e1cd0f6a611818f4f6fb7dc83b \
     --hash=sha256:015d48959d4add5d6c9f6c5210ee3803a830dce46356e3bc326d6776bde54681 \
@@ -468,8 +466,8 @@ jinja2==3.1.6 \
     --hash=sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67
     # via
     #   flask
-    #   govuk-frontend-jinja
     #   notifications-utils
+    #   notifynl-frontend-jinja
 jmespath==1.0.1 \
     --hash=sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980 \
     --hash=sha256:90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe
@@ -580,6 +578,8 @@ notifications-python-client==10.0.0 \
     --hash=sha256:0f152a4d23b7f7b827dae6b45ac63568a2bc56044b1aa57b66bc68b137c40e57
     # via -r requirements_nl.in
 notifications-utils @ git+https://github.com/Worth-NL/notifynl-utils.git@add33f3476c78a437648e3fbdbd230b1d39fa137
+    # via -r requirements_nl.in
+notifynl-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@08ff37bf48cafc08477d735cae51c2a7b938e8c4
     # via -r requirements_nl.in
 opentelemetry-api==1.44.0 \
     --hash=sha256:67647e5e9566edcf421166fdf022b3537f818635daa852b289e34604dc6fb33a \
