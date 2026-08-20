@@ -20,7 +20,11 @@ class ServiceApiClient:
     def __init__(self, app):
         self.api_client = OnwardsRequestNotificationsAPIClient(
             "x" * 100,
-            base_url=app.config["API_HOST_NAME"],
+            # .get(), not [] -- the upstream Test/Development config classes
+            # never define API_HOST_NAME_INTERNAL (only NotifyNL's ConfigNL
+            # and its subclasses do), so this falls back to the same value
+            # they've always used.
+            base_url=app.config.get("API_HOST_NAME_INTERNAL", app.config["API_HOST_NAME"]),
         )
         # our credential lengths aren't what NotificationsAPIClient's __init__ will expect
         # given it's designed for destructuring end-user api keys
