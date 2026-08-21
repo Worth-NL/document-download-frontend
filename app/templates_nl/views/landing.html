@@ -1,0 +1,27 @@
+{% extends "document_download_template.html" %}
+
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+
+{% block per_page_title %}
+  U heeft een bestand om te downloaden
+{% endblock %}
+
+{% block main_content %}
+  <p class="govuk-body">{{ service_name or '[SERVICE_NAME]'}} heeft u een bestand gestuurd om te downloaden.</p>
+  <p class="govuk-body govuk-!-margin-bottom-0">
+    {{ govukButton({
+      "href": continue_url,
+      "text": "Doorgaan",
+    }) }}
+  </p>
+  <p class="govuk-body">
+    Heeft u vragen?
+    {% if contact_info_type == "link" %}
+      <a href="{{ service_contact_info }}" class="govuk-link" rel="noreferrer"> Neem contact op met {{ service_name }}</a>.
+    {% elif contact_info_type == "email" %}
+      Mail naar <a href="mailto:{{ service_contact_info }}" class="govuk-link">{{service_contact_info}}</a>.
+    {% else %}
+      Bel {{ service_contact_info }}.
+    {% endif %}
+  </p>
+{% endblock %}

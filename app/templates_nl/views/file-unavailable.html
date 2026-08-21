@@ -1,0 +1,39 @@
+{% extends "document_download_template.html" %}
+
+{% block per_page_title %}
+  {% if status_code == 410 %}
+    Niet langer beschikbaar
+  {% elif status_code == 404 %}
+    Pagina niet gevonden
+  {% endif %}
+{% endblock %}
+
+{% block main_content %}
+  {% if status_code == 410 %}
+  <p class="govuk-body">
+    Het bestand dat {{ service_name }} u heeft gestuurd is verlopen of verwijderd.
+  </p>
+  {% elif status_code == 404 %}
+  <p class="govuk-body">
+    Als u op een link in een e-mail heeft geklikt, is het bestand mogelijk verlopen of verwijderd.
+  </p>
+  <p class="govuk-body">
+    Controleer of het webadres correct is ingevuld.
+  </p>
+  <p class="govuk-body">
+    Als u het webadres heeft geplakt, controleer dan of u het volledige adres hebt gekopieerd.
+  </p>
+  {% endif %}
+
+  <p class="govuk-body">
+    Heeft u vragen?
+    {% if contact_info_type == "link" %}
+      <a href="{{ service_contact_info }}" class="govuk-link" rel="noreferrer"> Neem contact op met {{ service_name }}</a>.
+    {% elif contact_info_type == "email" %}
+      Mail naar <a href="mailto:{{ service_contact_info }}" class="govuk-link">{{service_contact_info}}</a>.
+    {% else %}
+      Bel {{ service_contact_info }}.
+    {% endif %}
+  </p>
+
+{% endblock %}
