@@ -1,0 +1,34 @@
+{% extends "document_download_template.html" %}
+
+{% block per_page_title %}
+  Download uw bestand
+{% endblock %}
+
+{% block main_content %}
+  <p class="govuk-body">
+  {% if file_expiry_date %}
+    Dit bestand is te downloaden tot {{ file_expiry_date }}.
+  {% else %}
+    Informatie over de vervaldatum van het bestand is tijdelijk niet beschikbaar.
+  {% endif %}
+  </p>
+
+  <p class="govuk-body">
+    Zorg ervoor dat u het bestand opslaat op een plek waar u het kunt terugvinden.
+  </p>
+
+  <p class="govuk-body">
+    <a href="{{download_link}}" download class="govuk-link" rel="noreferrer">Download dit {{ file_type }} ({{ file_size }}) naar uw apparaat</a>
+  </p>
+
+  <p class="govuk-body">
+    Heeft u vragen?
+    {% if contact_info_type == "link" %}
+      <a href="{{ service_contact_info }}" class="govuk-link" rel="noreferrer"> Neem contact op met {{ service_name }}</a>.
+    {% elif contact_info_type == "email" %}
+      Mail naar <a href="mailto:{{ service_contact_info }}" class="govuk-link">{{service_contact_info}}</a>.
+    {% else %}
+      Bel {{ service_contact_info }}.
+    {% endif %}
+  </p>
+{% endblock %}

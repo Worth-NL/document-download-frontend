@@ -1,0 +1,43 @@
+{% extends "document_download_template.html" %}
+{%- from "govuk_frontend_jinja/components/button/macro.html" import govukButton -%}
+{%- from "macros/error_summary.html" import render_error_summary -%}
+
+
+{% block per_page_title %}
+  {% if form.errors %}Fout: {% endif %}Bevestig uw e-mailadres
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {{ render_error_summary(form) }}
+
+      <h1 class="govuk-heading-l">Bevestig uw e-mailadres</h1>
+
+      <p class="govuk-body">
+        Om veiligheidsredenen moeten we bevestigen naar welk e-mailadres het bestand is gestuurd voordat u het kunt downloaden.
+      </p>
+
+      <form method="post" novalidate>
+        {{ form.csrf_token }}
+        {{ form.email_address }}
+
+        {{ govukButton({
+          "text": "Doorgaan",
+          "type": "submit"
+        }) }}
+      </form>
+
+      <p class="govuk-body">
+        Heeft u vragen?
+        {% if contact_info_type == "link" %}
+          <a href="{{ service_contact_info }}" class="govuk-link" rel="noreferrer"> Neem contact op met {{ service_name }}</a>.
+        {% elif contact_info_type == "email" %}
+          Mail naar <a href="mailto:{{ service_contact_info }}" class="govuk-link">{{ service_contact_info }}</a>.
+        {% else %}
+          Bel {{ service_contact_info }}.
+        {% endif %}
+      </p>
+    </div>
+  </div>
+{% endblock %}

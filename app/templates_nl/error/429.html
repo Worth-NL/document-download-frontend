@@ -1,0 +1,13 @@
+{% extends "document_download_template.html" %}
+{% block per_page_title %}Kan document niet openen{% endblock %}
+{% block main_content %}
+  <p class="govuk-body">
+    Er zijn recent te veel pogingen gedaan om dit document te openen. Probeer het over een paar minuten opnieuw.
+  </p>
+  <p class="govuk-body">
+    <a class="govuk-link govuk-link--no-visited-state" href="{{ go_back_link }}">Ga terug naar {{ page_name }}</a>.
+  </p>
+  <p class="govuk-body">
+    Als u nog steeds geen toegang heeft tot het document, e-mail dan <a href="mailto:support@notificatie.nl" class="govuk-link">support@notificatie.nl</a>.
+  </p>
+{% endblock %}

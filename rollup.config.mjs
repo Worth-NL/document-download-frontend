@@ -3,19 +3,17 @@ import terser from '@rollup/plugin-terser';
 import copy from 'rollup-plugin-copy';
 import styles from "rollup-plugin-styler";
 
-// toggle to enable rebrand styles
-const enableRebrand = true;
 const paths = {
   src: 'app/assets/',
   dist: 'app/static/',
   npm: 'node_modules/',
   govuk_frontend: 'node_modules/govuk-frontend/dist/govuk/',
 };
-// separate path config for govuk-frontend assets, so we can manage rebrand paths easily
+
 const govukFrontendAssetPaths = {
-  images: `${paths.govuk_frontend}assets/${enableRebrand ? 'rebrand/': ''}images/**/*`,
+  images: `${paths.govuk_frontend}assets/images/**/*`,
   fonts: `${paths.govuk_frontend}assets/fonts/**/*`,
-  manifest: `${paths.govuk_frontend}assets/${enableRebrand ? 'rebrand/': ''}manifest.json`,
+  manifest: `${paths.govuk_frontend}assets/manifest.json`,
 };
 
 export default [
@@ -35,6 +33,8 @@ export default [
       copy({
         targets: [
           { src: paths.src + 'images/**/*', dest: paths.dist + 'images/' },
+          // NotifyNL brand fonts, referenced by notify-nl/_theme.scss as ../fonts/
+          { src: paths.src + 'fonts/**/*', dest: paths.dist + 'fonts/' },
           { src: govukFrontendAssetPaths.images, dest: paths.dist + 'images/' },
           { src: govukFrontendAssetPaths.fonts, dest: paths.dist + 'fonts/' },
           { src: govukFrontendAssetPaths.manifest, dest: paths.dist }
