@@ -13,6 +13,8 @@ RUN apt-get update \
     curl \
     && rm -rf /var/lib/apt/lists/* /tmp/*
 
+RUN python -m pip uninstall -y pip
+
 WORKDIR /home/vcap/app
 
 ##### Frontend Build Image ###################################################
