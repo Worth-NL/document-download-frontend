@@ -65,8 +65,6 @@ COPY --chown=notify:notify app app
 COPY --chown=notify:notify application.py entrypoint.sh gunicorn_config.py ./
 COPY --from=frontend_build /usr/frontend/app/static app/static
 COPY --from=frontend_build /usr/frontend/app/templates app/templates
-COPY --from=frontend_build --chown=notify:notify /usr/local/lib /usr/local/lib
-COPY --from=frontend_build --chown=notify:notify /usr/local/bin /usr/local/bin
 COPY --from=python_build --chown=notify:notify /home/vcap/app/app/version.py app/version.py
 USER root
 RUN python -m compileall . && \
@@ -99,6 +97,10 @@ COPY --from=python_build --chown=notify:notify /opt/venv /opt/venv
 
 # Make sure the app/ directory is there so that "make bootstrap" can create app/version.py
 RUN mkdir -p app
+
+# Node/npm are only needed here (make bootstrap-nl), not in the production image
+COPY --from=frontend_build --chown=notify:notify /usr/local/lib /usr/local/lib
+COPY --from=frontend_build --chown=notify:notify /usr/local/bin /usr/local/bin
 
 # Install dev/test requirements
 COPY --chown=notify:notify Makefile requirements_nl_test.txt package-lock.json package.json rollup.config.mjs .npmrc ./
