@@ -573,7 +573,9 @@ markupsafe==3.0.3 \
 mistune==3.3.3 \
     --hash=sha256:99de1585e42dcbd826faa9e11a202727a5e202e4e4722a4c69ac1ff615793dd7 \
     --hash=sha256:c4c6c0c840b8637a2e9b8b6d607eb7c8f00888bf14c754409bcd339e848c2477
-    # via notifications-utils
+    # via
+    #   -r requirements_nl.in
+    #   notifications-utils
 notifications-python-client==10.0.0 \
     --hash=sha256:0f152a4d23b7f7b827dae6b45ac63568a2bc56044b1aa57b66bc68b137c40e57
     # via -r requirements_nl.in

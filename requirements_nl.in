@@ -15,7 +15,8 @@ git+https://github.com/alphagov/gds_metrics_python.git@6f1840a57b6fb1ee40b7e84f2
 notifynl-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@20260817.7
 sentry-sdk[flask]~=1.45
 
-# [NOTIFYNL] vulnerability pins
-pypdf>=6.16.1
+# [NOTIFYNL] vulnerability patches
+mistune>=3.3.0
 pyjwt>=2.13.0
+pypdf>=6.16.1
 requests>=2.33.0
