@@ -66,3 +66,6 @@ npm-debug.log
 test_results.xml
 application.log.json
 app.log.json
+
+### Vulnerability scan ###
+.vulnerability-scan/
