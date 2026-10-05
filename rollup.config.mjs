@@ -59,7 +59,6 @@ export default [
             paths.npm
           ],
           silenceDeprecations: [
-            "mixed-decls",
             "global-builtin",
             "color-functions",
             "slash-div",
