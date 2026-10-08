@@ -12,9 +12,7 @@ notifications-utils @ git+https://github.com/Worth-NL/notifynl-utils.git@102.0.0
 
 git+https://github.com/alphagov/gds_metrics_python.git@6f1840a57b6fb1ee40b7e84f2f18ec229de8aa72
 
-# [NOTIFYNL] Temporary pin to the LandRegistry alphagov-sync-2026-09-28 branch (4.1.0);
-# re-pin to its release tag once that branch is merged and tagged.
-notifynl-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@befec6e3fd1e73330560750e1ee2dfdf3b2dea5f
+notifynl-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@20261008.8
 sentry-sdk[flask]~=2.63
 
 # [NOTIFYNL] vulnerability patches

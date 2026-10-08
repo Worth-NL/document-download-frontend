@@ -581,7 +581,7 @@ notifications-python-client==12.2.0 \
     # via -r requirements_nl.in
 notifications-utils @ git+https://github.com/Worth-NL/notifynl-utils.git@95493552b9fbd5b3b61656f0dcd87451c12bbb63
     # via -r requirements_nl.in
-notifynl-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@befec6e3fd1e73330560750e1ee2dfdf3b2dea5f
+notifynl-frontend-jinja @ git+https://github.com/Worth-NL/LandRegistry-frontend-jinja@26fc51cfdcea6b088ca0291be8dc9e9df3ed0d14
     # via -r requirements_nl.in
 opentelemetry-api==1.44.0 \
     --hash=sha256:67647e5e9566edcf421166fdf022b3537f818635daa852b289e34604dc6fb33a \
