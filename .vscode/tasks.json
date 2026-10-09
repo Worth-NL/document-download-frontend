@@ -10,7 +10,7 @@
         {
             "label": "Install DD-Frontend Python requirements",
             "type": "shell",
-            "command": "uv pip install -r requirements_nl_test.txt",
+            "command": "uv pip sync requirements_nl_test.txt",
             "dependsOn": ["Generate DD-Frontend version file"],
             "presentation": {
                 "showReuseMessage": false,
@@ -42,7 +42,7 @@
         {
             "label": "Install DD-Frontend local LandRegistry-frontend-jinja",
             "type": "shell",
-            "command": "CHOICE=$(cat /workspace/.local-editables-choice 2>/dev/null || echo No); if [ \"$CHOICE\" = \"Yes\" ]; then uv pip uninstall govuk-frontend-jinja && uv pip install -e ../LandRegistry-frontend-jinja; fi",
+            "command": "CHOICE=$(cat /workspace/.local-editables-choice 2>/dev/null || echo No); if [ \"$CHOICE\" = \"Yes\" ]; then uv pip uninstall notifynl-frontend-jinja && uv pip install -e ../LandRegistry-frontend-jinja; fi",
             "dependsOn": ["Install DD-Frontend local notifynl-utils"],
             "presentation": {
                 "showReuseMessage": false,

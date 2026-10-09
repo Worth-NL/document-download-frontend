@@ -26,6 +26,7 @@ def test_status(client):
         "/.well-known/security.txt",
     ],
 )
+@pytest.mark.skip(reason="[NOTIFYNL] NL serves its own security.txt, see test_index_nl.py")
 def test_security_policy_redirects_to_policy(client, url):
     response = client.get(url)
 
