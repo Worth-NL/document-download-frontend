@@ -21,7 +21,7 @@ from tests import normalize_spaces
         ("main.confirm_email_address", "post"),
     ],
 )
-def test_404_if_no_key_in_query_string_nl(service_id, document_id, view, method, client):
+def test_404_if_no_key_in_query_string(service_id, document_id, view, method, client):
     response = client.open(
         url_for(
             view,
@@ -45,7 +45,7 @@ def test_404_if_no_key_in_query_string_nl(service_id, document_id, view, method,
         ("main.confirm_email_address", "post"),
     ],
 )
-def test_when_document_is_unavailable_nl(
+def test_when_document_is_unavailable(
     view, method, service_id, document_id, key, client, sample_service, rmock, mocker
 ):
     mocker.patch(
@@ -98,7 +98,7 @@ def test_when_document_is_unavailable_nl(
         ("main.confirm_email_address", "post"),
     ],
 )
-def test_when_document_is_unavailable_old_api_nl(
+def test_when_document_is_unavailable_old_api(
     view, method, service_id, document_id, key, client, sample_service, rmock, mocker
 ):
     mocker.patch(
@@ -146,7 +146,7 @@ def test_when_document_is_unavailable_old_api_nl(
 
 
 @pytest.mark.parametrize("view", ("main.landing", "main.confirm_email_address", "main.download_document"))
-def test_download_document_returns_file_unavailable_if_file_past_expiry_date_nl(
+def test_download_document_returns_file_unavailable_if_file_past_expiry_date(
     service_id, document_id, key, client, sample_service, view, rmock, mocker
 ):
     mocker.patch(
@@ -185,7 +185,7 @@ def test_download_document_returns_file_unavailable_if_file_past_expiry_date_nl(
 
 
 @pytest.mark.parametrize("view", ("main.landing", "main.confirm_email_address", "main.download_document"))
-def test_download_document_returns_file_unavailable_if_file_past_expiry_date_old_api_nl(
+def test_download_document_returns_file_unavailable_if_file_past_expiry_date_old_api(
     service_id, document_id, key, client, sample_service, view, rmock, mocker
 ):
     mocker.patch(
@@ -256,7 +256,7 @@ def test_download_document_returns_file_unavailable_if_file_past_expiry_date_old
         403,
     ],
 )
-def test_404_hides_incorrect_credentials_nl(
+def test_404_hides_incorrect_credentials(
     view,
     method,
     api_status_code,
@@ -303,7 +303,7 @@ def test_404_hides_incorrect_credentials_nl(
     assert rmock.request_history[0].headers == AnySupersetOf({"some-onwards": "request-header"})
 
 
-def test_landing_page_creates_link_for_document_nl(
+def test_landing_page_creates_link_for_document(
     service_id, document_id, key, document_has_metadata_no_confirmation, client, mocker, sample_service
 ):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
@@ -326,7 +326,7 @@ def test_landing_page_creates_link_for_document_nl(
     )
 
 
-def test_landing_page_creates_link_to_confirm_email_address_nl(
+def test_landing_page_creates_link_to_confirm_email_address(
     service_id, document_id, key, document_has_metadata_requires_confirmation, client, mocker, sample_service
 ):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
@@ -349,7 +349,7 @@ def test_landing_page_creates_link_to_confirm_email_address_nl(
     )
 
 
-def test_confirm_email_address_page_shows_email_address_form_and_contact_details_nl(
+def test_confirm_email_address_page_shows_email_address_form_and_contact_details(
     service_id,
     document_id,
     key,
@@ -381,7 +381,7 @@ def test_confirm_email_address_page_shows_email_address_form_and_contact_details
     assert contact_link["href"] == "https://sample-service.gov.uk"
 
 
-def test_confirm_email_address_page_shows_an_error_if_the_email_address_is_invalid_nl(
+def test_confirm_email_address_page_shows_an_error_if_the_email_address_is_invalid(
     service_id,
     document_id,
     key,
@@ -415,7 +415,7 @@ def test_confirm_email_address_page_shows_an_error_if_the_email_address_is_inval
     assert normalize_spaces(page.select_one("#email_address-error").text) == "Error: Geen geldig e-mailadres"
 
 
-def test_confirm_email_address_page_shows_error_if_wrong_email_address_nl(
+def test_confirm_email_address_page_shows_error_if_wrong_email_address(
     service_id,
     document_id,
     key,
@@ -464,7 +464,7 @@ def test_confirm_email_address_page_shows_error_if_wrong_email_address_nl(
     assert not page.select_one("#email_address-error")
 
 
-def test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited_nl(
+def test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited(
     service_id,
     document_id,
     key,
@@ -511,7 +511,7 @@ def test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited_nl
     assert "notify-support@digital.cabinet-office.gov.uk" not in page.text
 
 
-def test_download_document_creates_link_to_actual_doc_from_api_nl(
+def test_download_document_creates_link_to_actual_doc_from_api(
     service_id, document_id, key, document_has_metadata_no_confirmation, client, mocker, sample_service
 ):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
@@ -542,7 +542,7 @@ def test_download_document_creates_link_to_actual_doc_from_api_nl(
         ("xlsx", "Microsoft Excel-spreadsheet"),
     ],
 )
-def test_download_document_shows_pretty_file_type_nl(
+def test_download_document_shows_pretty_file_type(
     service_id, document_id, key, client, mocker, sample_service, file_extension, expected_pretty_file_type
 ):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
@@ -562,7 +562,7 @@ def test_download_document_shows_pretty_file_type_nl(
     assert page.select("main a")[0].text == f"Download dit {expected_pretty_file_type} (0.7MB) naar uw apparaat"
 
 
-def test_download_document_handles_missing_expiry_nl(service_id, document_id, key, client, mocker, sample_service):
+def test_download_document_handles_missing_expiry(service_id, document_id, key, client, mocker, sample_service):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
     mocked_metadata = {
         "direct_file_url": "url",
@@ -583,7 +583,7 @@ def test_download_document_handles_missing_expiry_nl(service_id, document_id, ke
     )
 
 
-def test_download_document_shows_contact_information_nl(
+def test_download_document_shows_contact_information(
     service_id, document_id, key, document_has_metadata_no_confirmation, client, mocker, sample_service
 ):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
@@ -608,7 +608,7 @@ def test_download_document_shows_contact_information_nl(
         (50, "1 december 2022"),
     ],
 )
-def test_download_document_shows_expiry_date_nl(
+def test_download_document_shows_expiry_date(
     service_id, document_id, key, client, mocker, sample_service, days_till_expiry, expected_content
 ):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
@@ -632,7 +632,7 @@ def test_download_document_shows_expiry_date_nl(
     assert f"Dit bestand is te downloaden tot {expected_content}." in content_about_expiry_date.text
 
 
-def test_landing_page_has_supplier_contact_info_number_nl(
+def test_landing_page_has_supplier_contact_info(
     service_id,
     document_id,
     key,
