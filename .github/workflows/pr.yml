@@ -82,6 +82,9 @@ jobs:
       - name: NPM lint JS
         run: npm run lint:js
 
+      - name: Check superseded_tests_nl.toml
+        run: uv run pytest --collect-only -qq --nl-verify
+
       - uses: pavelzw/pytest-action@v2
         with:
           job-summary: false
@@ -90,15 +93,9 @@ jobs:
           custom-arguments: --junitxml=reports/pytest-unit.xml
           custom-pytest: uv run pytest
 
-      - uses: dorny/test-reporter@v2
+      # dorny/test-reporter, with xfailed and superseded tests counted separately from skipped
+      - uses: Worth-NL/ci-workflows/.github/actions/pytest-report@main
         if: ${{ !cancelled() }}
-        with:
-          name: PyTest Tests
-          path: reports/pytest-*.xml
-          reporter: java-junit
-          only-summary: true
-          use-actions-summary: false
-          badge-title: PYTEST
 
   build:
     if: github.event.pull_request.draft == false
@@ -188,13 +185,12 @@ jobs:
         with:
           version: v4.2.2
 
-      - name: Add chart repositories
-        run: |
-          helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-          helm repo add grafana https://grafana.github.io/helm-charts
-
-      - name: Helm chart dependency build
-        run: helm dependency build
+      # `update` (unlike `build`) fetches any repository listed in
+      # notifynl-full's Chart.yaml on its own, so new chart dependencies
+      # need no `helm repo add` here. Versions there are pinned exactly, so
+      # it resolves the same charts Chart.lock records.
+      - name: Helm chart dependency update
+        run: helm dependency update
         working-directory: ${{ github.workspace }}/notifynl-full
 
       # Renders the chart and validates against the live cluster API/CRDs
@@ -210,7 +206,8 @@ jobs:
           --reset-then-reuse-values \
           $HELM_SET_ARGS \
           --rollback-on-failure \
-          --dry-run=server
+          --dry-run=server \
+          > /dev/null
 
       - name: Deploy new tag
         id: helm-deploy

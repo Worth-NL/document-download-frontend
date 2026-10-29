@@ -1,0 +1,109 @@
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_404_hides_incorrect_credentials"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_404_hides_incorrect_credentials"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_404_if_no_key_in_query_string"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_404_if_no_key_in_query_string"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_confirm_email_address_page_shows_an_error_if_the_email_address_is_invalid"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_confirm_email_address_page_shows_an_error_if_the_email_address_is_invalid"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_confirm_email_address_page_shows_email_address_form_and_contact_details"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_confirm_email_address_page_shows_email_address_form_and_contact_details"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_confirm_email_address_page_shows_error_if_wrong_email_address"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_confirm_email_address_page_shows_error_if_wrong_email_address"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_creates_link_to_actual_doc_from_api"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_creates_link_to_actual_doc_from_api"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_handles_missing_expiry"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_handles_missing_expiry"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_returns_file_unavailable_if_file_past_expiry_date"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_returns_file_unavailable_if_file_past_expiry_date"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_returns_file_unavailable_if_file_past_expiry_date_old_api"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_returns_file_unavailable_if_file_past_expiry_date_old_api"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_shows_contact_information"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_shows_contact_information"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_shows_expiry_date"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_shows_expiry_date"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_download_document_shows_pretty_file_type"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_download_document_shows_pretty_file_type"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_landing_page_creates_link_for_document"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_landing_page_creates_link_for_document"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_landing_page_creates_link_to_confirm_email_address"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_landing_page_creates_link_to_confirm_email_address"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_landing_page_has_supplier_contact_info[07123456789-number-call 07123456789]"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_landing_page_has_supplier_contact_info"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_security_policy_redirects_to_policy"
+reason = "NL serves its own security.txt, see test_index_nl.py"
+counterpart = ["tests/app/main/views/test_index_nl.py::test_security_txt_is_served_as_plain_text", "tests/app/main/views/test_index_nl.py::test_legacy_security_txt_redirects_to_well_known"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_when_document_is_unavailable"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_when_document_is_unavailable"]
+
+[[test]]
+nodeid = "tests/app/main/views/test_index.py::test_when_document_is_unavailable_old_api"
+reason = "Translation issue"
+twin = ["tests/app/main/views/test_index_nl.py::test_when_document_is_unavailable_old_api"]
+
+[[test]]
+nodeid = "tests/app/test_errorhandlers.py::test_bad_url_returns_page_not_found"
+reason = "Translation issue"
+twin = ["tests/app/test_errorhandlers_nl.py::test_bad_url_returns_page_not_found"]
+
+[[test]]
+nodeid = "tests/app/test_errorhandlers.py::test_csrf_error_returns_400_status_code_and_500_error_page"
+reason = "Translation issue"
+twin = ["tests/app/test_errorhandlers_nl.py::test_csrf_error_returns_400_status_code_and_500_error_page"]
+
+[[test]]
+nodeid = "tests/app/test_forms.py::test_email_address_form_validates"
+reason = "Translation issue"
+twin = ["tests/app/test_forms_nl.py::test_email_address_form_validates"]

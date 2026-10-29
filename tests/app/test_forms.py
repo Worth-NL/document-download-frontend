@@ -12,7 +12,6 @@ def test_email_address_form_strips_whitespace(client):
     assert form.email_address.data == "me@example.com"
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 @pytest.mark.parametrize(
     "email_address,error",
     [

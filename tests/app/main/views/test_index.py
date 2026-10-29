@@ -26,7 +26,6 @@ def test_status(client):
         "/.well-known/security.txt",
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] NL serves its own security.txt, see test_index_nl.py")
 def test_security_policy_redirects_to_policy(client, url):
     response = client.get(url)
 
@@ -61,7 +60,6 @@ def test_services_view_redirects_to_api(client, url):
         ("main.confirm_email_address", "post"),
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_404_if_no_key_in_query_string(service_id, document_id, view, method, client):
     response = client.open(
         url_for(
@@ -73,7 +71,7 @@ def test_404_if_no_key_in_query_string(service_id, document_id, view, method, cl
     )
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
     assert response.status_code == 404
-    assert normalize_spaces(page.title.text) == "Page not found – NotifyNL"
+    assert normalize_spaces(page.title.text) == "Page not found – GOV.UK"
     assert normalize_spaces(page.h1.text) == "Page not found"
 
 
@@ -107,7 +105,6 @@ def test_notifications_api_error(view, method, service_id, document_id, client, 
         ("main.confirm_email_address", "post"),
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_when_document_is_unavailable(
     view, method, service_id, document_id, key, client, sample_service, rmock, mocker
 ):
@@ -161,7 +158,6 @@ def test_when_document_is_unavailable(
         ("main.confirm_email_address", "post"),
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_when_document_is_unavailable_old_api(
     view, method, service_id, document_id, key, client, sample_service, rmock, mocker
 ):
@@ -210,7 +206,6 @@ def test_when_document_is_unavailable_old_api(
 
 
 @pytest.mark.parametrize("view", ("main.landing", "main.confirm_email_address", "main.download_document"))
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_returns_file_unavailable_if_file_past_expiry_date(
     service_id, document_id, key, client, sample_service, view, rmock, mocker
 ):
@@ -250,7 +245,6 @@ def test_download_document_returns_file_unavailable_if_file_past_expiry_date(
 
 
 @pytest.mark.parametrize("view", ("main.landing", "main.confirm_email_address", "main.download_document"))
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_returns_file_unavailable_if_file_past_expiry_date_old_api(
     service_id, document_id, key, client, sample_service, view, rmock, mocker
 ):
@@ -363,7 +357,6 @@ def test_download_document_succeeds_if_missing_available_until(
         403,
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_404_hides_incorrect_credentials(
     view,
     method,
@@ -411,7 +404,6 @@ def test_404_hides_incorrect_credentials(
     assert rmock.request_history[0].headers == AnySupersetOf({"some-onwards": "request-header"})
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_landing_page_creates_link_for_document(
     service_id, document_id, key, document_has_metadata_no_confirmation, client, mocker, sample_service
 ):
@@ -428,14 +420,13 @@ def test_landing_page_creates_link_for_document(
 
     assert response.status_code == 200
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "You have a file to download – NotifyNL"
+    assert normalize_spaces(page.title.text) == "You have a file to download – GOV.UK"
     assert normalize_spaces(page.h1.text) == "You have a file to download"
     assert page.find("a", string=re.compile("Continue"))["href"] == url_for(
         "main.download_document", service_id=service_id, document_id=document_id, key="1234"
     )
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_landing_page_creates_link_to_confirm_email_address(
     service_id, document_id, key, document_has_metadata_requires_confirmation, client, mocker, sample_service
 ):
@@ -452,14 +443,13 @@ def test_landing_page_creates_link_to_confirm_email_address(
 
     assert response.status_code == 200
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "You have a file to download – NotifyNL"
+    assert normalize_spaces(page.title.text) == "You have a file to download – GOV.UK"
     assert normalize_spaces(page.h1.text) == "You have a file to download"
     assert page.find("a", string=re.compile("Continue"))["href"] == url_for(
         "main.confirm_email_address", service_id=service_id, document_id=document_id, key="1234"
     )
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_confirm_email_address_page_shows_email_address_form_and_contact_details(
     service_id,
     document_id,
@@ -482,7 +472,7 @@ def test_confirm_email_address_page_shows_email_address_form_and_contact_details
     assert response.status_code == 200
 
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "Confirm your email address – NotifyNL"
+    assert normalize_spaces(page.title.text) == "Confirm your email address – GOV.UK"
     assert normalize_spaces(page.h1.text) == "Confirm your email address"
     assert page.select_one("form")
     assert not page.select(".govuk-error-summary")
@@ -520,7 +510,6 @@ def test_confirm_email_address_page_redirects_to_download_page_if_confirmation_n
     )
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_confirm_email_address_page_shows_an_error_if_the_email_address_is_invalid(
     service_id,
     document_id,
@@ -544,7 +533,7 @@ def test_confirm_email_address_page_shows_an_error_if_the_email_address_is_inval
     assert response.status_code == 400
 
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "Error: Confirm your email address – NotifyNL"
+    assert normalize_spaces(page.title.text) == "Error: Confirm your email address – GOV.UK"
     assert normalize_spaces(page.h1.text) == "Confirm your email address"
 
     # Error summary in banner at the top of the page
@@ -555,7 +544,6 @@ def test_confirm_email_address_page_shows_an_error_if_the_email_address_is_inval
     assert normalize_spaces(page.select_one("#email_address-error").text) == "Error: Not a valid email address"
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_confirm_email_address_page_shows_error_if_wrong_email_address(
     service_id,
     document_id,
@@ -590,7 +578,7 @@ def test_confirm_email_address_page_shows_error_if_wrong_email_address(
     assert response.status_code == 400
 
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "Error: Confirm your email address – NotifyNL"
+    assert normalize_spaces(page.title.text) == "Error: Confirm your email address – GOV.UK"
     assert normalize_spaces(page.h1.text) == "Confirm your email address"
 
     # Error summary in banner at the top of the page
@@ -604,7 +592,6 @@ def test_confirm_email_address_page_shows_error_if_wrong_email_address(
     assert not page.select_one("#email_address-error")
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited(
     service_id,
     document_id,
@@ -639,7 +626,7 @@ def test_confirm_email_address_page_shows_429_error_page_if_auth_rate_limited(
     assert response.status_code == 429
 
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "Cannot access document – NotifyNL"
+    assert normalize_spaces(page.title.text) == "Cannot access document – GOV.UK"
     assert normalize_spaces(page.h1.text) == "Cannot access document"
 
     assert page.find("a", string="Go back to confirm your email address").get("href") == (
@@ -713,7 +700,6 @@ def test_confirm_email_address_page_redirects_and_sets_cookie_on_success(
     assert rmock.request_history[1].headers == AnySupersetOf({"some-onwards": "request-header"})
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_creates_link_to_actual_doc_from_api(
     service_id, document_id, key, document_has_metadata_no_confirmation, client, mocker, sample_service
 ):
@@ -723,7 +709,7 @@ def test_download_document_creates_link_to_actual_doc_from_api(
 
     assert response.status_code == 200
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
-    assert normalize_spaces(page.title.text) == "Download your file – NotifyNL"
+    assert normalize_spaces(page.title.text) == "Download your file – GOV.UK"
     assert normalize_spaces(page.h1.text) == "Download your file"
     assert page.select("main a")[0]["href"] == "url"
     assert page.select("main a")[0].text == "Download this text file (0.7MB) to your device"
@@ -745,7 +731,6 @@ def test_download_document_creates_link_to_actual_doc_from_api(
         ("xlsx", "Microsoft Excel spreadsheet"),
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_shows_pretty_file_type(
     service_id, document_id, key, client, mocker, sample_service, file_extension, expected_pretty_file_type
 ):
@@ -766,7 +751,6 @@ def test_download_document_shows_pretty_file_type(
     assert page.select("main a")[0].text == f"Download this {expected_pretty_file_type} (0.7MB) to your device"
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_handles_missing_expiry(service_id, document_id, key, client, mocker, sample_service):
     mocker.patch("app.service_api_client.get_service", return_value={"data": sample_service})
     mocked_metadata = {
@@ -785,7 +769,6 @@ def test_download_document_handles_missing_expiry(service_id, document_id, key, 
     assert any(("File expiry information is temporarily unavailable" in elem.text) for elem in page.select("main p"))
 
 
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_shows_contact_information(
     service_id, document_id, key, document_has_metadata_no_confirmation, client, mocker, sample_service
 ):
@@ -811,7 +794,6 @@ def test_download_document_shows_contact_information(
         (50, "1 December 2022"),
     ],
 )
-@pytest.mark.skip(reason="[NOTIFYNL] Translation issue")
 def test_download_document_shows_expiry_date(
     service_id, document_id, key, client, mocker, sample_service, days_till_expiry, expected_content
 ):
@@ -856,12 +838,7 @@ def test_pages_contain_key_security_headers(
     [
         ("https://sample-service.gov.uk", "link", "https://sample-service.gov.uk"),
         ("info@sample-service.gov.uk", "email", "mailto:info@sample-service.gov.uk"),
-        pytest.param(
-            "07123456789",
-            "number",
-            "call 07123456789",
-            marks=pytest.mark.skip(reason="[NOTIFYNL] Translation issue"),
-        ),
+        ("07123456789", "number", "call 07123456789"),
     ],
 )
 def test_landing_page_has_supplier_contact_info(
