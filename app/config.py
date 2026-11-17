@@ -73,6 +73,7 @@ class DevNL(ConfigNL):
 class TestNL(ConfigNL):
     DEBUG = True
     NOTIFY_REQUEST_LOG_LEVEL = "DEBUG"
+    WTF_CSRF_ENABLED = True
 
     NOTIFY_ENVIRONMENT = "test"
 
@@ -80,6 +81,7 @@ class TestNL(ConfigNL):
 class AccNL(ConfigNL):
     DEBUG = False
     NOTIFY_REQUEST_LOG_LEVEL = "INFO"
+    WTF_CSRF_ENABLED = True
 
     NOTIFY_ENVIRONMENT = "acceptance"
 
@@ -87,6 +89,7 @@ class AccNL(ConfigNL):
 class ProdNL(ConfigNL):
     DEBUG = False
     NOTIFY_REQUEST_LOG_LEVEL = "ERROR"
+    WTF_CSRF_ENABLED = True
 
     NOTIFY_ENVIRONMENT = "production"
 

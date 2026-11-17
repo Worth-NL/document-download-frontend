@@ -11,7 +11,7 @@ from app.forms import EmailAddressForm
         ("", "Vul uw e-mailadres in"),
     ],
 )
-def test_email_address_form_validates_nl(client, email_address, error):
+def test_email_address_form_validates(client, email_address, error):
     form = EmailAddressForm(formdata=MultiDict([("email_address", email_address)]))
 
     form.validate()

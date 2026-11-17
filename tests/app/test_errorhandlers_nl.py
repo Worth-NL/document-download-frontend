@@ -5,14 +5,14 @@ from flask_wtf.csrf import CSRFError
 from tests import normalize_spaces
 
 
-def test_bad_url_returns_page_not_found_nl(client):
+def test_bad_url_returns_page_not_found(client):
     response = client.get("/bad_url")
     assert response.status_code == 404
     page = BeautifulSoup(response.data.decode("utf-8"), "html.parser")
     assert page.h1.string.strip() == "Pagina niet gevonden"
 
 
-def test_csrf_error_returns_400_status_code_and_500_error_page_nl(
+def test_csrf_error_returns_400_status_code_and_500_error_page(
     service_id,
     document_id,
     key,
